@@ -128,7 +128,7 @@ response = oriacall.calls.upload(
     {
         "idempotencyKey": "crm-call-123",
         "externalId": "crm-call-123",
-        "objectiveId": "objective-id",
+        "objectiveId": "objective-id",  # optional hint
         "queueAnalysis": True,
         "agent": {
             "externalId": "agent-1",
@@ -164,6 +164,10 @@ To upload in-memory audio, use `contents` instead of `path`:
 ```
 
 Required scope: `calls:write`.
+
+`objectiveId` is optional. When provided, Oriacall treats it as a hint for objective identification. The first audio analysis pass may override it; if no objective can be identified confidently, Oriacall uses the organization's superadmin-configured fallback objective.
+
+Call responses include objective selection metadata: `objectiveHint`, `identifiedObjective`, `objectiveSelectionSource`, `objectiveIdentificationConfidence`, and `analysisStage`. Call detail analysis includes user-visible organization detections in `organizationDetectedTags` and `organizationDetectedParams`. Hidden global detections are never exposed by the API or SDK.
 
 ## Pagination
 
