@@ -511,8 +511,9 @@ class WebhookEndpointsResource(Paginates):
         return self.client.delete(f"/v1/webhooks/endpoints/{self.client.encode_path(endpoint_id)}")
 
     def rotate_secret(self, endpoint_id: str) -> ApiResponse:
+        path = f"/v1/webhooks/endpoints/{self.client.encode_path(endpoint_id)}/rotate-secret"
         return self.client.json(
-            "POST", f"/v1/webhooks/endpoints/{self.client.encode_path(endpoint_id)}/secret", {}
+            "POST", path, {}
         )
 
     def test(self, endpoint_id: str) -> ApiResponse:
