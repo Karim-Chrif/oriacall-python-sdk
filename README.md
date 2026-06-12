@@ -128,6 +128,7 @@ response = oriacall.calls.upload(
     {
         "idempotencyKey": "crm-call-123",
         "externalId": "crm-call-123",
+        "recordedAt": "2026-06-10T14:30:00Z",
         "objectiveId": "objective-id",  # optional hint
         "queueAnalysis": True,
         "agent": {
@@ -151,6 +152,7 @@ response = oriacall.calls.upload(
 )
 
 print(response.data["data"]["id"])
+print(response.data["data"]["recordedAt"])
 ```
 
 To upload in-memory audio, use `contents` instead of `path`:
