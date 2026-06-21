@@ -167,9 +167,9 @@ To upload in-memory audio, use `contents` instead of `path`:
 
 Required scope: `calls:write`.
 
-`objectiveId` is optional. When provided, Oriacall treats it as a hint for objective identification. The first audio analysis pass may override it; if no objective can be identified confidently, Oriacall uses the organization's superadmin-configured fallback objective.
+`objectiveId` is optional. When provided, Oriacall associates the call with that organization objective. When omitted, Oriacall associates the call with an existing objective in the organization.
 
-Call responses include objective selection metadata: `objectiveHint`, `identifiedObjective`, `objectiveSelectionSource`, `objectiveIdentificationConfidence`, and `analysisStage`. `analysisStatus` is one of `pending`, `queued`, `processing`, `completed`, or `failed`. `queueStatus` is `queued`, `processing`, `completed`, `failed`, or `null` when analysis has not been queued. `analysisStage` is `audio_pass`, `objective_pass`, `publishing`, `completed`, or `null` when analysis has not been queued. Internal dead-letter and cancelled runs are exposed as `failed`. Call detail analysis includes user-visible organization detections in `organizationDetectedTags` and `organizationDetectedParams`. Hidden global detections are never exposed by the API or SDK.
+Call summaries include `callResult`, `callResultLabel`, and `callQualityScore`. `analysisStatus` is one of `pending`, `queued`, `processing`, `completed`, or `failed`. `queueStatus` is `queued`, `processing`, `completed`, `failed`, or `null` when analysis has not been queued. `analysisStage` is `audio_pass`, `text_pass`, `publishing`, `completed`, or `null` when analysis has not been queued. Internal dead-letter and cancelled runs are exposed as `failed`. Completed call analysis includes `summary`, `callStrengths`, `callWeaknesses`, `callObservations`, `objections`, and `alerts`.
 
 ## Pagination
 
