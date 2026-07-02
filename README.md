@@ -121,6 +121,8 @@ oriacall.webhooks.endpoints.delete("endpoint-id")
 oriacall.webhooks.endpoints.paginate({"limit": 50})
 ```
 
+`oriacall.calls.get("call-id")` includes transcript data when available. Transcript turn `speaker` values can be `agent`, `client`, or `system`. `system` represents telephony infrastructure such as voicemail greetings, carrier messages, transfer prompts, or tones; it is not a human participant.
+
 ## Upload A Call
 
 ```python
