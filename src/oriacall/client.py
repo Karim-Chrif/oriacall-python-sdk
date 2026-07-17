@@ -379,6 +379,11 @@ class CallsResource(Paginates):
     def get(self, call_id: str) -> ApiResponse:
         return self.client.get(f"/v1/calls/{self.client.encode_path(call_id)}")
 
+    def update(self, call_id: str, body: dict[str, Any]) -> ApiResponse:
+        return self.client.json(
+            "PATCH", f"/v1/calls/{self.client.encode_path(call_id)}", body
+        )
+
     def upload(self, body: dict[str, Any]) -> ApiResponse:
         idempotency_key = body.get("idempotencyKey") or body.get("idempotency_key")
         if not idempotency_key:

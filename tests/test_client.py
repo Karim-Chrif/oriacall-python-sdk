@@ -155,6 +155,24 @@ def test_calls_upload_sends_metadata_audio_and_idempotency_key() -> None:
     assert request["files"]["audioFile"] == ("call.mp3", b"audio-bytes", "audio/mpeg")
 
 
+def test_calls_update_sends_recorded_time() -> None:
+    session = FakeSession(
+        [
+            token_response(),
+            FakeResponse(200, {"data": {"id": "call-id"}}, {"X-Request-Id": "req-update"}),
+        ]
+    )
+    client = Oriacall(client_id="client", client_secret="secret", session=session)
+
+    response = client.calls.update("call/id", {"recordedAt": "2026-06-10T14:30:00Z"})
+
+    assert response.request_id == "req-update"
+    request = session.requests[1]
+    assert request["method"] == "PATCH"
+    assert request["url"] == "https://api.oriacall.com/v1/calls/call%2Fid"
+    assert request["json"] == {"recordedAt": "2026-06-10T14:30:00Z"}
+
+
 def test_verify_webhook_signature() -> None:
     timestamp = str(int(time.time()))
     body = '{"event":"analysis.completed"}'
