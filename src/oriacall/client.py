@@ -377,6 +377,9 @@ class CallsResource(Paginates):
     def list(self, options: dict[str, Any] | None = None) -> ApiResponse:
         return self.client.get("/v1/calls", options or {})
 
+    def lookup_by_external_ids(self, external_ids: list[str]) -> ApiResponse:
+        return self.client.json("POST", "/v1/calls/lookup", {"externalIds": external_ids})
+
     def get(self, call_id: str) -> ApiResponse:
         return self.client.get(f"/v1/calls/{self.client.encode_path(call_id)}")
 

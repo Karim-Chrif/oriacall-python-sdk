@@ -96,6 +96,7 @@ oriacall.agents.list({"objectiveId": "objective-id"})
 oriacall.agents.paginate({"limit": 50})
 
 oriacall.calls.list({"limit": 50, "sortBy": "recordedAt"})
+oriacall.calls.lookup_by_external_ids(["crm-call-123", "crm-call-456"])
 oriacall.calls.get("call-id")
 oriacall.calls.update("call-id", {"recordedAt": "2026-06-10T14:30:00Z"})
 oriacall.calls.upload({...})
@@ -157,6 +158,21 @@ response = oriacall.calls.list(
 
 for call in response.data["data"]:
     print(call["id"], call["externalId"], call["recordedAt"])
+```
+
+### `oriacall.calls.lookup_by_external_ids(external_ids)`
+
+Looks up calls by exact external ID. Required scope: `calls:read`.
+
+`external_ids` must contain 1 to 100 distinct, non-empty strings of at most 255 characters. Matching is case-sensitive and organization-scoped. The response includes every matching call summary, including duplicate database matches for an external ID; missing IDs do not produce placeholders.
+
+```python
+response = oriacall.calls.lookup_by_external_ids(
+    ["crm-call-123", "crm-call-456"]
+)
+
+for call in response.data["data"]:
+    print(call["externalId"], call["id"])
 ```
 
 ## Upload A Call

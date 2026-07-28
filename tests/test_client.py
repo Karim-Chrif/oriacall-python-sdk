@@ -96,6 +96,27 @@ def test_calls_list_serializes_exact_external_id_query_parameter(option_name: st
     assert session.requests[1]["params"] == [("externalId", "crm-call-123")]
 
 
+def test_calls_lookup_by_external_ids_serializes_json_request() -> None:
+    session = FakeSession(
+        [
+            token_response(),
+            FakeResponse(200, {"data": [{"id": "call-id"}]}, {"X-Request-Id": "req-lookup"}),
+        ]
+    )
+    client = Oriacall(client_id="client", client_secret="secret", session=session)
+
+    response = client.calls.lookup_by_external_ids(["crm-call-123", "crm-call-456"])
+
+    assert response.data == {"data": [{"id": "call-id"}]}
+    assert response.status == 200
+    assert response.request_id == "req-lookup"
+    request = session.requests[1]
+    assert request["method"] == "POST"
+    assert request["url"] == "https://api.oriacall.com/v1/calls/lookup"
+    assert request["headers"]["Content-Type"] == "application/json"
+    assert request["json"] == {"externalIds": ["crm-call-123", "crm-call-456"]}
+
+
 def test_paginate_yields_items_until_next_cursor_is_empty() -> None:
     session = FakeSession(
         [
