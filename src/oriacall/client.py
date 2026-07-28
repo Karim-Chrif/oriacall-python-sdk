@@ -244,6 +244,7 @@ class Oriacall:
     def _flatten_params(self, params: dict[str, Any]) -> list[tuple[str, str]]:
         pairs: list[tuple[str, str]] = []
         aliases = {
+            "external_id": "externalId",
             "objective_custom_fields": "objectiveCustom",
             "objectiveCustomFields": "objectiveCustom",
             "lead_custom_fields": "leadCustom",

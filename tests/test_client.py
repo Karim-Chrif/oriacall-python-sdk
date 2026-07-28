@@ -81,6 +81,21 @@ def test_list_flattens_custom_field_filters() -> None:
     assert ("limit", "10") in session.requests[1]["params"]
 
 
+@pytest.mark.parametrize("option_name", ["external_id", "externalId"])
+def test_calls_list_serializes_exact_external_id_query_parameter(option_name: str) -> None:
+    session = FakeSession(
+        [
+            token_response(),
+            FakeResponse(200, {"data": [], "pagination": {"nextCursor": None}}),
+        ]
+    )
+    client = Oriacall(client_id="client", client_secret="secret", session=session)
+
+    client.calls.list({option_name: "crm-call-123"})
+
+    assert session.requests[1]["params"] == [("externalId", "crm-call-123")]
+
+
 def test_paginate_yields_items_until_next_cursor_is_empty() -> None:
     session = FakeSession(
         [

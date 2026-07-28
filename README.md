@@ -124,6 +124,41 @@ oriacall.webhooks.endpoints.paginate({"limit": 50})
 
 `oriacall.calls.get("call-id")` includes transcript data when available. Transcript turn `speaker` values can be `agent`, `client`, or `system`. `system` represents telephony infrastructure such as voicemail greetings, carrier messages, transfer prompts, or tones; it is not a human participant.
 
+### `oriacall.calls.list(options=None)`
+
+Lists organization calls without transcripts. Required scope: `calls:read`.
+
+| Option | Type | Description |
+| --- | --- | --- |
+| `limit` | `int` | Number of calls to return. Defaults to `50`; maximum is `100`. |
+| `cursor` | `str` | Cursor from the previous response. |
+| `objectiveId` | `str` | Filter by objective ID. |
+| `leadId` | `str` | Filter by lead ID. |
+| `agentId` | `str` | Filter by agent ID. |
+| `external_id` | `str` | Filter by an exact external ID match. `externalId` is also accepted. |
+| `createdAfter` | `str` | ISO 8601 lower bound for Oriacall creation time. |
+| `createdBefore` | `str` | ISO 8601 upper bound for Oriacall creation time. |
+| `recordedAfter` | `str` | ISO 8601 lower bound for source recording time. Falls back to `createdAt` when `recordedAt` is null. |
+| `recordedBefore` | `str` | ISO 8601 upper bound for source recording time. Falls back to `createdAt` when `recordedAt` is null. |
+| `sortBy` | `"createdAt" \| "recordedAt"` | Sort field. Defaults to `createdAt`; `recordedAt` falls back to `createdAt` when null. |
+| `leadCustomFields` | `dict[str, object]` | Filters on lead custom fields attached to calls. `lead_custom_fields` is also accepted. |
+
+```python
+response = oriacall.calls.list(
+    {
+        "limit": 50,
+        "external_id": "crm-call-123",
+        "objectiveId": "objective-id",
+        "recordedAfter": "2026-01-01T00:00:00Z",
+        "sortBy": "recordedAt",
+        "lead_custom_fields": {"crm_stage": "qualified"},
+    }
+)
+
+for call in response.data["data"]:
+    print(call["id"], call["externalId"], call["recordedAt"])
+```
+
 ## Upload A Call
 
 ```python
